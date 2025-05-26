@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -64,10 +65,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String password = edtPassword.getText().toString();
                 String campus = snCampus.getSelectedItem().toString();
                 String role = rbStaff.isChecked() ? "Staff" : rbManager.isChecked() ? "Manager" : "None";
-                boolean check = cbHaha.isChecked();
+                boolean remmemberMe = cbHaha.isChecked();
                 Toast.makeText(MainActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
+                if (username.isEmpty() || password.isEmpty()){
+                    Toast.makeText(MainActivity.this, "username or passoword need enter ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(MainActivity.this, ViewUserProfile2.class);
+                intent.putExtra("username",username);
+                intent.putExtra("password",password);
+                intent.putExtra("campus",campus);
+                intent.putExtra("role",role);
+                intent.putExtra("rememberMe",remmemberMe);
+                startActivity(intent);
             }
         });
+
     }
 
     @Override
