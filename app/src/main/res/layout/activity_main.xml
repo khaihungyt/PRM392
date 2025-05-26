@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".MainActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="facebook" />
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        />
+
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="@string/username" />
+
+    <EditText
+        android:id="@+id/editUsername"
+        android:layout_width="match_parent"
+        android:layout_height="71dp"
+        android:ems="10"
+        android:hint="Enter text"
+        android:inputType="text" />
+        <TextView
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="@string/password" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:ems="10"
+            android:hint="Enter password"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/campus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/campus" />
+
+        <Spinner
+            android:id="@+id/spCampus"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+           android:entries="@array/campus"/>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rbStaff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Staff" />
+
+            <RadioButton
+                android:id="@+id/rbManager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Manager" />
+
+            <CheckBox
+                android:id="@+id/cbRemember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remember me ?" />
+        </RadioGroup>
+       </LinearLayout>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_login" />
+    </LinearLayout>
+</LinearLayout>

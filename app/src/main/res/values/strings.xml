@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="button_login" translatable="false">Login</string>
+    <string name="campus">Campus</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string-array name="campus">
+        <item>Ho chi minh</item>
+        <item>Ha Noi</item>
+    </string-array>
+</resources>
