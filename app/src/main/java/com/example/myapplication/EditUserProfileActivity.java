@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -40,6 +42,14 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 intent.putExtra("MobileNo","0705927599");
                 setResult(RESULT_OK,intent);
                 finish();
+            });
+            getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Toast.makeText(EditUserProfileActivity.this,"Back pressed",Toast.LENGTH_SHORT).show();
+               // finish();
+                }
+
             });
     }
 }
