@@ -3,8 +3,10 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.squareup.picasso.Picasso;
+
+import java.net.URL;
+
 public class ViewUserProfile2 extends AppCompatActivity {
     private TextView tvFirstName;
 
@@ -26,7 +32,7 @@ public class ViewUserProfile2 extends AppCompatActivity {
     private TextView tvMobileNo;
 
     private TextView tvLastName;
-
+private ImageView imageView;
     private ActivityResultLauncher<Intent> editProfileLauncher=registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -84,5 +90,30 @@ public class ViewUserProfile2 extends AppCompatActivity {
             //startActivityForResult(intent,2);
             editProfileLauncher.launch(intent);
         });
+        imageView=findViewById(R.id.imgAvatar);
+        imageView.setOnClickListener(v ->selectImage());
+        String url="https://cdn.pixabay.com/photo/2024/05/26/10/15/bird-8788491_1280.jpg";
+        Picasso.with(this).load(url)
+                .error(R.drawable.image_error).into(imageView);
+
     }
+    private void selectImage(){
+        Intent intent = new Intent(android.content.Intent.ACTION_PICK);
+       // Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+
+        imageSelectLauncher.launch(intent);
+    }
+    private  ActivityResultLauncher<Intent> imageSelectLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    if(o.getData()!=null){
+                        Uri uri = o.getData().getData();
+                        imageView.setImageURI(uri);
+                    }
+                }
+            }
+    );
 }
