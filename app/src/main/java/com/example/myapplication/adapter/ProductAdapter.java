@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.ProductListActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.bean.ProductBean;
 
@@ -21,11 +22,12 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<ProductBean> productList;
     private Context context;
-
+    private int selectedPosition;
     public ProductAdapter(List<ProductBean> productList, Context context) {
         this.productList = productList;
         this.context = context;
     }
+
 
     @NonNull
     @Override
@@ -48,7 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
 
-    public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView tvProductId;
         private TextView tvProductName;
         private TextView tvPrice;
@@ -57,7 +59,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvProductId=itemView.findViewById(R.id.tvProdutctId);
             tvProductName=itemView.findViewById(R.id.tvProdutctName);
             tvPrice=itemView.findViewById(R.id.tvProdutctPrice);
-            itemView.setOnClickListener(this);
+            tvPrice.setOnClickListener(this);
+            if(context instanceof  ProductListActivity) {
+               ((ProductListActivity) context).registerForContextMenu(itemView);
+            }
+            tvProductName.setOnLongClickListener(this);
         }
         @Override
         public void onClick(View v) {
@@ -77,6 +83,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 AlertDialog dialog=builder.create();
                 dialog.show();
             }
+
+        @Override
+        public boolean onLongClick(View v) {
+            selectedPosition=getAdapterPosition();
+            Toast.makeText(context, "Long Clicked"+getAdapterPosition(),Toast.LENGTH_SHORT).show();
+            //((ProductListActivity) context).openContextMenu(v);
+            v.showContextMenu();
+            return true;
         }
+    }
     }
 

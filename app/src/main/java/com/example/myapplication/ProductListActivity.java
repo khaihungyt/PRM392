@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -40,6 +42,7 @@ private List<ProductBean> productBeanList = new ArrayList<>();
         recyclerViewProductList.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewProductList.setAdapter(productAdapter);
         fetchProductList();
+       //registerForContextMenu(recyclerViewProductList);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,15 +63,27 @@ private List<ProductBean> productBeanList = new ArrayList<>();
             finish();
 
         }
-    return false;
+        return false;
     }
-
     private void showFavourite() {
         Toast.makeText(this, "Favorite is clicked",Toast.LENGTH_SHORT).show();
     }
 
     private void showSetting() {
         Toast.makeText(this, "Setting is clicked",Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDetails() {
+        Toast.makeText(this, "details is clicked",Toast.LENGTH_SHORT).show();
+    }
+
+    private void showEdit() {
+        Toast.makeText(this, "Edit is clicked",Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDelete() {
+
+        Toast.makeText(this, "Delete is clicked",Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onMenuOpened(int featureId,Menu menu){
@@ -94,4 +109,30 @@ private List<ProductBean> productBeanList = new ArrayList<>();
         }
         productAdapter.notifyDataSetChanged();
     }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,ContextMenu.ContextMenuInfo menuInfo){
+        getMenuInflater().inflate(R.menu.menu_context,menu);
+        super.onCreateContextMenu(menu, v , menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        if (item.getItemId()==R.id.menu_view){
+            showDetails();
+            return true;
+        }
+        if (item.getItemId()==R.id.menu_edit){
+            showEdit();
+            return true;
+        }
+        if (item.getItemId()==R.id.menu_delete){
+            showDelete();
+            finish();
+
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+
 }

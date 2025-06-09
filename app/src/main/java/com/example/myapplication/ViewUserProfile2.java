@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -65,6 +69,26 @@ private ImageView imageView;
             return insets;
         });
         tvFirstName=findViewById(R.id.tvFirstName);
+        tvFirstName.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(ViewUserProfile2.this, "Clicked", Toast.LENGTH_SHORT).show(); // Kiểm tra
+
+                PopupMenu popupMenu = new PopupMenu(ViewUserProfile2.this,tvFirstName);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId()==R.id.menu_detail_profiles){
+                            Toast.makeText(ViewUserProfile2.this, "Show details",Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
         tvLastName=findViewById(R.id.tvLastName);
         tvMobileNo=findViewById(R.id.tvPhoneNo);
         tvMobileNo.setOnClickListener(new View.OnClickListener() {
