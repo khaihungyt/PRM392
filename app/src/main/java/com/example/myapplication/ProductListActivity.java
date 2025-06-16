@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -9,7 +11,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,6 +27,7 @@ import com.example.myapplication.bean.ProductBean;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ProductListActivity extends AppCompatActivity {
 private RecyclerView recyclerViewProductList;
@@ -63,6 +69,10 @@ private List<ProductBean> productBeanList = new ArrayList<>();
             finish();
 
         }
+        if (item.getItemId()==R.id.menu_request_gps){
+            Toast.makeText(this, "GPS is clicked",Toast.LENGTH_SHORT).show();
+            requestGPS();
+        }
         return false;
     }
     private void showFavourite() {
@@ -100,13 +110,22 @@ private List<ProductBean> productBeanList = new ArrayList<>();
         return super.onMenuOpened(featureId,menu);
     }
     private void fetchProductList() {
-        for(int i=1;i<=10;i++){
-            ProductBean product = new ProductBean();
-            product.setId(i);
-            product.setName("Product"+i);
-            product.setPrice(i*10.0);
-            productBeanList.add(product);
+
+
+        Scanner scanner =new Scanner(getResources().openRawResource(R.raw.productlist));
+        while(scanner.hasNextLine()){
+            String line =scanner.nextLine();
+            String[] parts =line.split(",");
+            if(parts.length==3){
+                ProductBean product = new ProductBean();
+                product.setId(Integer.parseInt(parts[0]));
+                product.setName(parts[1]);
+                product.setPrice(Double.parseDouble(parts[2]));
+                productBeanList.add(product);
+            }
         }
+
+
         productAdapter.notifyDataSetChanged();
     }
     @Override
@@ -130,9 +149,44 @@ private List<ProductBean> productBeanList = new ArrayList<>();
             finish();
 
         }
+
         return super.onContextItemSelected(item);
     }
 
+    private void requestGPS() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setTitle("GPS permission")
+                        .setMessage("Please grant GPS")
+                        .setPositiveButton("OK",(dialog, which) -> {
+                            dialog.dismiss();
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION},1);
+                        })
+                        .setCancelable(false);
+            }else{
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION},1);
+            }
+        }else{
+            Toast.makeText(this, "GPS permission is granted",Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission,int[] grantResults){
+        super.onRequestPermissionsResult(requestCode,permission,grantResults);
+        switch (requestCode){
+            case 1:
+                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "GPS permission granted",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
 
 }

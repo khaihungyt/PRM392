@@ -1,0 +1,6 @@
+1,product1, 3.5
+2,product2, 3.5
+3,product3, 3.5
+4,product4, 3.5
+5,product5, 3.5
+6,product6, 3.5

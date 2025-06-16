@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -20,6 +21,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myapplication.bean.UserBean;
+
+import database.DatabaseHandler;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private final String TAG = "MainActivity";
@@ -30,14 +35,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private RadioButton rbStaff;
     private RadioButton rbManager;
     private CheckBox cbHaha;
-
+    private DatabaseHandler dbHandler=new DatabaseHandler(MainActivity.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
+//        startActivity(intent);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -45,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             return insets;
         });
+        // Chuyển sang màn hình mong muốn
+//        Intent intent123 = new Intent(MainActivity.this, RegisterViewActivity.class);
+//        startActivity(intent123);
+
         edtUsername = findViewById(R.id.editUsername);
         rbManager = findViewById(R.id.rbManager);
         rbStaff = findViewById(R.id.rbStaff);
@@ -73,6 +82,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Toast.makeText(MainActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
                 if (username.isEmpty() || password.isEmpty()){
                     Toast.makeText(MainActivity.this, "username or passoword need enter ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                UserBean user =dbHandler.getUserByUserName(username);
+                if(user==null|| !user.getPassword().equals(password)){
+                    Toast.makeText( MainActivity.this,"Invalid username or password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SharedPreferences sharedPreferences=getSharedPreferences("user_prefs",MODE_PRIVATE);
+                String prefUserName =sharedPreferences.getString("username","");
+                String prefPassWord =sharedPreferences.getString("password","");
+                if (!username.equals(prefUserName) || !password.equals(prefPassWord)){
+                    Toast.makeText( MainActivity.this,"Wrong username or password", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(MainActivity.this, ViewUserProfile2.class);
