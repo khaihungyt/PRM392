@@ -68,7 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ROLE_FIELD, user.getRole());
         values.put(CAMPUS_FIELD, user.getCampus());
         db.insert(USER_TABLE_NAME, null, values);
-        db.close();
+        //db.close();
     }
     public UserBean getUserByUserName(String username){
         SQLiteDatabase db = getReadableDatabase();
@@ -100,5 +100,49 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.setCampus(cursor.getString(campusIndex));
         }
         return user;
+    }
+
+    public void updateUser(UserBean updatedUser) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USERNAME_FIELD, updatedUser.getUsername());
+        values.put(PASSWORD_FIELD, updatedUser.getPassword());
+        values.put(FIRSTNAME_FIELD, updatedUser.getFirstName());
+        values.put(LASTNAME_FIELD, updatedUser.getLastName());
+        values.put(EMAIL_FIELD, updatedUser.getEmail());
+        values.put(PHONE_FIELD, updatedUser.getPhone());
+        values.put(ADDRESS_FIELD, updatedUser.getAddress());
+        values.put(ROLE_FIELD, updatedUser.getRole());
+        values.put(CAMPUS_FIELD, updatedUser.getCampus());
+       db.update(
+                USER_TABLE_NAME,
+                values,
+                ID_FIELD + " = ?",
+                new String[]{String.valueOf(updatedUser.getId())}
+        );
+
+        //db.close();
+    }
+
+
+    public void deleteUser(int id){
+        SQLiteDatabase db = getReadableDatabase();
+        db.delete(USER_TABLE_NAME,
+                 ID_FIELD+ " = ?",
+                new String[]{String.valueOf(id)});
+        //db.close();
+    }
+
+
+    public boolean checkUser(String username,String password) {
+        SQLiteDatabase db = getReadableDatabase();
+      Cursor cursor=  db.query(USER_TABLE_NAME, null,
+                USERNAME_FIELD + "=? AND" + PASSWORD_FIELD + " = ?",
+                new String[]{username, password},null,null,null);
+        if(cursor.moveToFirst()){
+            cursor.close();
+            return true;
+        }
+        return false;
     }
 }

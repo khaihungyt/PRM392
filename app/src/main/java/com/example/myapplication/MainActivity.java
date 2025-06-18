@@ -89,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Toast.makeText( MainActivity.this,"Invalid username or password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                SharedPreferences sharedPreferences=getSharedPreferences("user_prefs",MODE_PRIVATE);
-                String prefUserName =sharedPreferences.getString("username","");
-                String prefPassWord =sharedPreferences.getString("password","");
-                if (!username.equals(prefUserName) || !password.equals(prefPassWord)){
-                    Toast.makeText( MainActivity.this,"Wrong username or password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                SharedPreferences sharedPreferences=getSharedPreferences("user_prefs",MODE_PRIVATE);
+//                String prefUserName =sharedPreferences.getString("username","");
+//                String prefPassWord =sharedPreferences.getString("password","");
+//                if (!username.equals(prefUserName) || !password.equals(prefPassWord)){
+//                    Toast.makeText( MainActivity.this,"Wrong username or password", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 Intent intent = new Intent(MainActivity.this, ViewUserProfile2.class);
                 intent.putExtra("username",username);
                 intent.putExtra("password",password);

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapter.ProductAdapter;
 import com.example.myapplication.bean.ProductBean;
+import com.example.myapplication.repository.ProductRepository;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -32,7 +33,9 @@ import java.util.Scanner;
 public class ProductListActivity extends AppCompatActivity {
 private RecyclerView recyclerViewProductList;
 private ProductAdapter productAdapter;
+private ProductRepository productRepository;
 private List<ProductBean> productBeanList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,7 @@ private List<ProductBean> productBeanList = new ArrayList<>();
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        productRepository=new ProductRepository(this);
         recyclerViewProductList=findViewById(R.id.recyclerViewProductList);
         productAdapter=new ProductAdapter(productBeanList,this);
         recyclerViewProductList.setLayoutManager(new LinearLayoutManager(this));
