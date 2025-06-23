@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.EditProductActivity;
 import com.example.myapplication.ProductListActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.bean.ProductBean;
@@ -22,6 +24,11 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<ProductBean> productList;
     private Context context;
+
+    public int getSelectedPosition() {
+        return selectedPosition;
+    }
+
     private int selectedPosition;
     public ProductAdapter(List<ProductBean> productList, Context context) {
         this.productList = productList;

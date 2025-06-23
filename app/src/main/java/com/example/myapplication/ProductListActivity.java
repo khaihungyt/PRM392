@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,9 +9,14 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +40,32 @@ public class ProductListActivity extends AppCompatActivity {
 private RecyclerView recyclerViewProductList;
 private ProductAdapter productAdapter;
 private ProductRepository productRepository;
+private Button btnAddProduct;
 private List<ProductBean> productBeanList = new ArrayList<>();
+    private ActivityResultLauncher<Intent> editProductLauncher=registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(result.getResultCode() == RESULT_OK){
+                        Intent data =result.getData();
 
+                        if(data!=null){
+                            int productId = data.getIntExtra("ProductId", -1);
+                            String updatedName = data.getStringExtra("EditProductName");
+                            double updatedPrice = Double.parseDouble(data.getStringExtra("EditProductPrice"));
+                            for (ProductBean product : productBeanList) {
+                                if (product.getId() == productId) {
+                                    product.setName(updatedName);
+                                    product.setPrice(updatedPrice);
+                                    productRepository.updateProduct(product);
+                                    productAdapter.notifyDataSetChanged();
+                                    break; // đã tìm thấy thì không cần lặp nữa
+                                }
+                            }
+                        }
+                    }
+                }
+            });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +79,25 @@ private List<ProductBean> productBeanList = new ArrayList<>();
         productRepository=new ProductRepository(this);
         recyclerViewProductList=findViewById(R.id.recyclerViewProductList);
         productAdapter=new ProductAdapter(productBeanList,this);
+
         recyclerViewProductList.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewProductList.setAdapter(productAdapter);
-        fetchProductList();
+        //fetchProductList();
        //registerForContextMenu(recyclerViewProductList);
+        getProducts();
+        btnAddProduct=findViewById(R.id.btnAddProduct);
+        btnAddProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductListActivity.this, AddProductActivity.class);
+            startActivity(intent);
+
+        });
     }
+    private void getProducts(){
+        productBeanList.clear();
+        productBeanList.addAll(productRepository.getAllProducts());
+        productAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -145,7 +189,14 @@ private List<ProductBean> productBeanList = new ArrayList<>();
             return true;
         }
         if (item.getItemId()==R.id.menu_edit){
+
             showEdit();
+            int position=productAdapter.getSelectedPosition();
+            ProductBean selectedProduct= productBeanList.get(position);
+            Intent intent =new Intent(ProductListActivity.this, EditProductActivity.class);
+            intent.putExtra("ProductId",selectedProduct.getId());
+            //startActivity(intent);
+            editProductLauncher.launch(intent);
             return true;
         }
         if (item.getItemId()==R.id.menu_delete){
@@ -191,6 +242,5 @@ private List<ProductBean> productBeanList = new ArrayList<>();
                 break;
         }
     }
-
 
 }

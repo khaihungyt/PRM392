@@ -7,9 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".ProductListActivity">
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerViewProductList"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-</androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProductList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="25dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/btnAddProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add product"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewProductList"
+        tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

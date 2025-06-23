@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddProductActivity">
+<TextView
+    android:id="@+id/tvAddProductName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="name"
+    />
+
+    <EditText
+        android:id="@+id/edtAddProductName"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:ems="10"
+        android:hint="product name"
+        android:inputType="text"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/tvAddPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price" />
+
+    <EditText
+        android:id="@+id/edtAddPrice"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:ems="10"
+        android:hint="price"
+        android:inputType="text"
+        android:text="" />
+
+    <Button
+        android:id="@+id/btnSaveAddProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+</LinearLayout>
