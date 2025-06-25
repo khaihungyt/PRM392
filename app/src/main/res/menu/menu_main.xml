@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_setting"
-        app:showAsAction="ifRoom"
-        android:title="Setting"
         android:icon="@drawable/ic_action_setting"
-        />
+        android:title="Setting"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_favourite"
-        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_favourite"
         android:title="Favourite"
-        android:icon="@drawable/ic_action_favourite"/>
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_send_notification"
+        android:icon="@drawable/ic_action_favourite"
+        android:title="Send notification"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_start_service"
+        android:title="Start Service"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_logout"
-        app:showAsAction="ifRoom"
-        android:title="Logout" />
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_count_option"
+        android:title="Count"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_request_gps"
-        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_mylocation"
         android:title="Request GPS"
-        android:icon="@android:drawable/ic_menu_mylocation" />
+        app:showAsAction="ifRoom" />
 </menu>
