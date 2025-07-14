@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -53,6 +55,16 @@ public class ProductListActivity extends AppCompatActivity {
     private ProductRepository productRepository;
     private Button btnAddProduct;
     private List<ProductBean> productBeanList = new ArrayList<>();
+    private BroadcastReceiver myBroadCastReceiver =new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        String action =intent.getAction();
+        String message= intent.getStringExtra("message");
+            Toast.makeText(context,"Action:"+action+ " and Message: "+message, Toast.LENGTH_SHORT).show();
+
+        }
+    };
+
     private ActivityResultLauncher<Intent> editProductLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -89,6 +101,12 @@ public class ProductListActivity extends AppCompatActivity {
             return insets;
         });
         productRepository = new ProductRepository(this);
+        IntentFilter intentFilter=new IntentFilter();
+        intentFilter.addAction("my_action");
+        registerReceiver(myBroadCastReceiver,intentFilter,Context.RECEIVER_EXPORTED);
+
+
+
         recyclerViewProductList = findViewById(R.id.recyclerViewProductList);
         productAdapter = new ProductAdapter(productBeanList, this);
 
@@ -178,6 +196,11 @@ public class ProductListActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.menu_count_option) {
             showCount();
+        }
+        if(item.getItemId() == R.id.menu_send_broadcast){
+            Intent intent = new Intent("my_action");
+            intent.putExtra("message","Message from activity");
+            sendBroadcast(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -342,4 +365,9 @@ public class ProductListActivity extends AppCompatActivity {
 //        }
 //        return false;
 //    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(myBroadCastReceiver);
+    }
 }

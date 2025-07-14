@@ -23,6 +23,10 @@
         android:title="Start Service"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_send_broadcast"
+        android:title="Send BroadCart"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_logout"
         android:title="Logout"
         app:showAsAction="ifRoom" />

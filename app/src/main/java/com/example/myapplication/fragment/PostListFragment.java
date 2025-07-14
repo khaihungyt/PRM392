@@ -2,21 +2,35 @@ package com.example.myapplication.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.myapplication.ProductListActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.PostListAdapter;
 import com.example.myapplication.adapter.ProductAdapter;
+import com.example.myapplication.bean.PostBean;
 import com.example.myapplication.bean.ProductBean;
-import com.example.myapplication.entity.Product;
-import com.example.myapplication.repository.ProductRepository;
+import com.example.myapplication.webservice.MyApiEndpointInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,23 +78,58 @@ public class PostListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    private List<ProductBean> productList=new ArrayList<>();
-    private ProductRepository productRepository;
+
+    private final List<PostBean> postList = new ArrayList<>();
+    private PostListAdapter postListAdapter;
+    public Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_post_list,container,false);
-        TextView tvHello=view.findViewById(R.id.tvFragment_post_list);
-        tvHello.setText("Hello: This is post list fragment");
-//        productList.clear();
-//        productRepository=new ProductRepository(this);
-//        List<ProductBean> productList1 =productRepository.getAllProducts();
-//        productList1.stream().count();
-//        ProductAdapter adapter = new ProductAdapter(productList,getContext());
-//        androidx.recyclerview.widget.RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(getContext()));
-//        recyclerView.setAdapter(adapter);
+        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        postListAdapter = new PostListAdapter(postList, getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(postListAdapter);
+        getPosts();
+
         return view;
+
+
+    }
+
+    private void getPosts() {
+        String baseUrl = "https://jsonplaceholder.typicode.com/";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        MyApiEndpointInterface myApiEndpointInterface = retrofit.create(MyApiEndpointInterface.class);
+        Call<List<PostBean>> call = myApiEndpointInterface.getPosts();
+
+        call.enqueue(new retrofit2.Callback<List<PostBean>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<PostBean>> call,
+                                   @NonNull retrofit2.Response<List<PostBean>> response) {
+
+                    List<PostBean> posts = response.body();
+                    postList.clear();
+                    assert posts != null;
+                    postList.addAll(posts);
+                    postListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<PostBean>> call, Throwable t) {
+                Log.e("Error", t.getMessage());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }); // <-- sửa lại dấu đóng ngoặc ở đây
+            }
+        });
     }
 }

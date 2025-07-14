@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.example.myapplication.provider.PERMISSION_READ_USERS"/>
+    <uses-permission android:name="com.example.myapplication.provider.PERMISSION_WRITE_USERS"/>
 
     <application
         android:allowBackup="true"
@@ -30,6 +32,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+        <provider
+            android:authorities="com.example.myapplication.provider"
+            android:name=".provider.UserProvider"
+            android:readPermission="com.example.myapplication.provider.PERMISSION_READ_USERS"
+            android:writePermission="com.example.myapplication.provider.PERMISSION_WRITE_USERS"
+            android:exported="true"/>
         <activity
             android:name=".MapDemoActivity"
             android:exported="false" />

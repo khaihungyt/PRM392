@@ -27,6 +27,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.sql.Time;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ViewUserProfile2 extends AppCompatActivity {
     private TextView tvFirstName;
@@ -34,8 +37,9 @@ public class ViewUserProfile2 extends AppCompatActivity {
     private TextView tvEmail;
     private TextView tvAddress;
     private TextView tvMobileNo;
-
+    public Timer timer;
     private TextView tvLastName;
+    private int counter;
 private ImageView imageView;
     private ActivityResultLauncher<Intent> editProfileLauncher=registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -69,6 +73,25 @@ private ImageView imageView;
             return insets;
         });
         tvFirstName=findViewById(R.id.tvFirstName);
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        counter++;
+                        tvFirstName.setText("Counter:"+ counter);
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask,0,1000);
+
+
+
+
+
         tvFirstName.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
